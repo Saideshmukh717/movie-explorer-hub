@@ -1,0 +1,30 @@
+export interface Movie {
+  id: number;
+  title: string;
+  original_title: string;
+  overview: string;
+  tagline: string;
+  budget: number;
+  revenue: number;
+  runtime: number;
+  release_date: string;
+  year: number;
+  genres: string[];
+  keywords: string[];
+  original_language: string;
+  popularity: number;
+  vote_average: number;
+  vote_count: number;
+  status: string;
+  production_companies: string[];
+  production_countries: string[];
+  cast: Record<string, string>;
+  crew: Record<string, string>;
+  tags: string;
+  engagement_score: number;
+  weighted_rating: number;
+  popularity_category: string;
+  overview_length: number;
+  success_score: number;
+  deep_theme?: string;
+}
