@@ -169,7 +169,7 @@ function MovieDetailContent({ movie }: { movie: any }) {
           <section className="space-y-4">
             <h2 className="font-display text-3xl text-foreground">Cast</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-              {castEntries.map(([character, actor]) => (
+              {castEntries.map(([character, actor]: [string, string]) => (
                 <div key={character} className="rounded-lg border border-border bg-card p-3 text-center">
                   <div className="mx-auto mb-2 h-12 w-12 rounded-full bg-secondary flex items-center justify-center">
                     <span className="font-display text-lg text-muted-foreground">{actor.charAt(0)}</span>
