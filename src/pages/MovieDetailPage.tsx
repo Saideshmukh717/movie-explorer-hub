@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { formatCurrency } from "@/lib/movieData";
+import { usePoster } from "@/hooks/usePoster";
 
 export default function MovieDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -23,6 +24,12 @@ export default function MovieDetailPage() {
     );
   }
 
+  return <MovieDetailContent movie={movie} />;
+}
+
+function MovieDetailContent({ movie }: { movie: any }) {
+  const poster = usePoster(movie.title, movie.year);
+
   const profit = movie.revenue - movie.budget;
   const profitPercent = movie.budget > 0 ? ((profit / movie.budget) * 100).toFixed(0) : "N/A";
   const director = movie.crew["Director"] || "Unknown";
@@ -34,6 +41,9 @@ export default function MovieDetailPage() {
     <div className="min-h-screen pt-16">
       {/* Hero gradient */}
       <div className="relative border-b border-border">
+        {poster && (
+          <img src={poster} alt="" className="absolute inset-0 h-full w-full object-cover opacity-15 blur-md scale-105" />
+        )}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-accent/5" />
         <div className="container relative z-10 py-10 space-y-6">
           <Button asChild variant="ghost" size="sm">
@@ -43,11 +53,19 @@ export default function MovieDetailPage() {
           </Button>
 
           <div className="flex flex-col md:flex-row gap-8">
-            {/* Poster placeholder */}
+            {/* Poster */}
             <div className="w-full md:w-64 shrink-0">
-              <div className="aspect-[2/3] rounded-lg bg-gradient-to-br from-secondary to-card border border-border flex items-center justify-center">
-                <span className="font-display text-8xl text-muted-foreground/20">{movie.title.charAt(0)}</span>
-              </div>
+              {poster ? (
+                <img
+                  src={poster}
+                  alt={movie.title}
+                  className="w-full rounded-lg border border-border shadow-2xl shadow-primary/10"
+                />
+              ) : (
+                <div className="aspect-[2/3] rounded-lg bg-gradient-to-br from-secondary to-card border border-border flex items-center justify-center">
+                  <span className="font-display text-8xl text-muted-foreground/20">{movie.title.charAt(0)}</span>
+                </div>
+              )}
             </div>
 
             {/* Info */}
@@ -79,14 +97,13 @@ export default function MovieDetailPage() {
               </div>
 
               <div className="flex flex-wrap gap-2">
-                {movie.genres.map((g) => (
+                {movie.genres.map((g: string) => (
                   <Badge key={g} variant="secondary">{g}</Badge>
                 ))}
               </div>
 
               <p className="text-sm text-foreground/80 leading-relaxed max-w-2xl">{movie.overview}</p>
 
-              {/* Crew */}
               <div className="grid grid-cols-3 gap-4 pt-2 max-w-lg">
                 <div>
                   <p className="text-xs text-muted-foreground">Director</p>
@@ -107,7 +124,6 @@ export default function MovieDetailPage() {
       </div>
 
       <div className="container py-10 space-y-10">
-        {/* Financials & Scores */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
             { icon: DollarSign, label: "Budget", value: movie.budget > 0 ? formatCurrency(movie.budget) : "N/A" },
@@ -125,7 +141,6 @@ export default function MovieDetailPage() {
           ))}
         </div>
 
-        {/* Score bars */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
@@ -150,12 +165,11 @@ export default function MovieDetailPage() {
           </div>
         </div>
 
-        {/* Cast */}
         {castEntries.length > 0 && (
           <section className="space-y-4">
             <h2 className="font-display text-3xl text-foreground">Cast</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-              {castEntries.map(([character, actor]) => (
+              {castEntries.map(([character, actor]: [string, string]) => (
                 <div key={character} className="rounded-lg border border-border bg-card p-3 text-center">
                   <div className="mx-auto mb-2 h-12 w-12 rounded-full bg-secondary flex items-center justify-center">
                     <span className="font-display text-lg text-muted-foreground">{actor.charAt(0)}</span>
@@ -168,12 +182,11 @@ export default function MovieDetailPage() {
           </section>
         )}
 
-        {/* Production */}
         {movie.production_companies.length > 0 && (
           <section className="space-y-3">
             <h2 className="font-display text-2xl text-foreground">Production Companies</h2>
             <div className="flex flex-wrap gap-2">
-              {movie.production_companies.map((c) => (
+              {movie.production_companies.map((c: string) => (
                 <Badge key={c} variant="outline" className="text-xs">{c}</Badge>
               ))}
             </div>

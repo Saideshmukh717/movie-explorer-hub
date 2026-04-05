@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Star } from "lucide-react";
 import type { Movie } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
+import { usePoster } from "@/hooks/usePoster";
 
 interface MovieCardProps {
   movie: Movie;
@@ -19,6 +20,7 @@ export function MovieCard({ movie, size = "md" }: MovieCardProps) {
   const firstGenre = movie.genres[0] || "Unknown";
   const colorClass = genreColors[firstGenre] || "bg-secondary text-secondary-foreground border-border";
   const year = movie.year || movie.release_date?.slice(0, 4);
+  const poster = usePoster(movie.title, movie.year);
 
   return (
     <Link
@@ -27,17 +29,26 @@ export function MovieCard({ movie, size = "md" }: MovieCardProps) {
         size === "sm" ? "min-w-[180px]" : size === "lg" ? "min-w-[280px]" : "min-w-[220px]"
       }`}
     >
-      {/* Poster placeholder with gradient */}
+      {/* Poster */}
       <div
         className={`relative overflow-hidden bg-gradient-to-br from-secondary to-background ${
           size === "sm" ? "h-40" : size === "lg" ? "h-64" : "h-52"
         }`}
       >
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="font-display text-4xl text-muted-foreground/30">
-            {movie.title.charAt(0)}
-          </span>
-        </div>
+        {poster ? (
+          <img
+            src={poster}
+            alt={movie.title}
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            loading="lazy"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="font-display text-4xl text-muted-foreground/30">
+              {movie.title.charAt(0)}
+            </span>
+          </div>
+        )}
         {/* Rating badge */}
         <div className="absolute top-2 right-2 flex items-center gap-1 rounded-full bg-background/80 px-2 py-1 backdrop-blur-sm">
           <Star className="h-3 w-3 fill-primary text-primary" />
