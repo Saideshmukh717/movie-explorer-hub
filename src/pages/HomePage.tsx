@@ -7,6 +7,85 @@ import { MovieRow } from "@/components/MovieRow";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/movieData";
+import { usePoster } from "@/hooks/usePoster";
+
+function HeroBanner({ movie }: { movie: any }) {
+  const poster = usePoster(movie.title, movie.year);
+
+  return (
+    <section className="relative overflow-hidden border-b border-border">
+      {poster && (
+        <img
+          src={poster}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover opacity-20 blur-sm scale-105"
+        />
+      )}
+      <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background/40" />
+      <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
+
+      <div className="container relative z-10 flex min-h-[480px] flex-col justify-end pb-12 pt-20">
+        <div className="flex gap-8 items-end">
+          {poster && (
+            <img
+              src={poster}
+              alt={movie.title}
+              className="hidden md:block w-48 rounded-lg shadow-2xl shadow-primary/10 border border-border"
+            />
+          )}
+          <div className="max-w-2xl space-y-4 animate-fade-in">
+            {movie.deep_theme && (
+              <Badge variant="outline" className="border-primary/40 text-primary">
+                {movie.deep_theme}
+              </Badge>
+            )}
+            <h1 className="font-display text-6xl md:text-7xl leading-none text-foreground">
+              {movie.title}
+            </h1>
+            {movie.tagline && (
+              <p className="text-lg text-muted-foreground italic">"{movie.tagline}"</p>
+            )}
+            <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
+              {movie.overview}
+            </p>
+
+            <div className="flex flex-wrap items-center gap-4 pt-2">
+              <div className="flex items-center gap-1">
+                <Star className="h-5 w-5 fill-primary text-primary" />
+                <span className="font-semibold text-primary">{movie.vote_average.toFixed(1)}</span>
+              </div>
+              <span className="text-muted-foreground">•</span>
+              <span className="text-sm text-muted-foreground">{movie.year}</span>
+              <span className="text-muted-foreground">•</span>
+              <span className="text-sm text-muted-foreground">{movie.runtime} min</span>
+              {movie.revenue > 0 && (
+                <>
+                  <span className="text-muted-foreground">•</span>
+                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                    <DollarSign className="h-3 w-3" />
+                    {formatCurrency(movie.revenue)}
+                  </div>
+                </>
+              )}
+            </div>
+
+            <div className="flex gap-3 pt-2">
+              <Button asChild>
+                <Link to={`/movie/${movie.id}`}>
+                  <Play className="h-4 w-4" /> View Details
+                </Link>
+              </Button>
+              <Button variant="outline" asChild>
+                <Link to="/browse">Browse All</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function HomePage() {
   const { movies, loading } = useMovies();
@@ -28,72 +107,13 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen pt-16">
-      {/* Hero Section */}
-      {featured && (
-        <section className="relative overflow-hidden border-b border-border">
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background/40" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
+      {featured && <HeroBanner movie={featured} />}
 
-          <div className="container relative z-10 flex min-h-[480px] flex-col justify-end pb-12 pt-20">
-            <div className="max-w-2xl space-y-4 animate-fade-in">
-              {featured.deep_theme && (
-                <Badge variant="outline" className="border-primary/40 text-primary">
-                  {featured.deep_theme}
-                </Badge>
-              )}
-              <h1 className="font-display text-6xl md:text-7xl leading-none text-foreground">
-                {featured.title}
-              </h1>
-              {featured.tagline && (
-                <p className="text-lg text-muted-foreground italic">"{featured.tagline}"</p>
-              )}
-              <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
-                {featured.overview}
-              </p>
-
-              <div className="flex flex-wrap items-center gap-4 pt-2">
-                <div className="flex items-center gap-1">
-                  <Star className="h-5 w-5 fill-primary text-primary" />
-                  <span className="font-semibold text-primary">{featured.vote_average.toFixed(1)}</span>
-                </div>
-                <span className="text-muted-foreground">•</span>
-                <span className="text-sm text-muted-foreground">{featured.year}</span>
-                <span className="text-muted-foreground">•</span>
-                <span className="text-sm text-muted-foreground">{featured.runtime} min</span>
-                {featured.revenue > 0 && (
-                  <>
-                    <span className="text-muted-foreground">•</span>
-                    <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                      <DollarSign className="h-3 w-3" />
-                      {formatCurrency(featured.revenue)}
-                    </div>
-                  </>
-                )}
-              </div>
-
-              <div className="flex gap-3 pt-2">
-                <Button asChild>
-                  <Link to={`/movie/${featured.id}`}>
-                    <Play className="h-4 w-4" /> View Details
-                  </Link>
-                </Button>
-                <Button variant="outline" asChild>
-                  <Link to="/browse">Browse All</Link>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Movie Rows */}
       <div className="container space-y-10 py-10">
         <MovieRow title="🔥 Trending Now" movies={trending} />
         <MovieRow title="⭐ Top Rated" movies={topRated} />
         <MovieRow title="💰 Box Office Hits" movies={boxOffice} />
 
-        {/* Stats bar */}
         <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
             { icon: TrendingUp, label: "Total Movies", value: movies.length.toLocaleString() },
