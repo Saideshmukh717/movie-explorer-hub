@@ -25,8 +25,8 @@ function HeroBanner({ movie }: { movie: any }) {
       <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
 
-      <div className="container relative z-10 flex min-h-[480px] flex-col justify-end pb-12 pt-20">
-        <div className="flex gap-8 items-end">
+      <div className="container relative z-10 flex min-h-[320px] sm:min-h-[480px] flex-col justify-end pb-8 sm:pb-12 pt-16 sm:pt-20 px-4">
+        <div className="flex gap-4 sm:gap-8 items-end">
           {poster && (
             <img
               src={poster}
@@ -34,13 +34,13 @@ function HeroBanner({ movie }: { movie: any }) {
               className="hidden md:block w-48 rounded-lg shadow-2xl shadow-primary/10 border border-border"
             />
           )}
-          <div className="max-w-2xl space-y-4 animate-fade-in">
+          <div className="max-w-2xl space-y-3 sm:space-y-4 animate-fade-in">
             {movie.deep_theme && (
               <Badge variant="outline" className="border-primary/40 text-primary">
                 {movie.deep_theme}
               </Badge>
             )}
-            <h1 className="font-display text-6xl md:text-7xl leading-none text-foreground">
+            <h1 className="font-display text-4xl sm:text-6xl md:text-7xl leading-none text-foreground">
               {movie.title}
             </h1>
             {movie.tagline && (
@@ -109,7 +109,7 @@ export default function HomePage() {
     <div className="min-h-screen pt-16">
       {featured && <HeroBanner movie={featured} />}
 
-      <div className="container space-y-10 py-10">
+      <div className="container space-y-8 sm:space-y-10 py-8 sm:py-10 px-4">
         <MovieRow title="🔥 Trending Now" movies={trending} />
         <MovieRow title="⭐ Top Rated" movies={topRated} />
         <MovieRow title="💰 Box Office Hits" movies={boxOffice} />
