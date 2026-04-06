@@ -55,10 +55,10 @@ export default function BrowsePage() {
 
   return (
     <div className="min-h-screen pt-20 pb-10">
-      <div className="container space-y-6">
-        <div className="space-y-2">
-          <h1 className="font-display text-5xl text-foreground">Browse Movies</h1>
-          <p className="text-muted-foreground">{filtered.length.toLocaleString()} movies found</p>
+      <div className="container space-y-4 sm:space-y-6 px-4">
+        <div className="space-y-1 sm:space-y-2">
+          <h1 className="font-display text-3xl sm:text-5xl text-foreground">Browse Movies</h1>
+          <p className="text-sm text-muted-foreground">{filtered.length.toLocaleString()} movies found</p>
         </div>
 
         {/* Search and controls */}

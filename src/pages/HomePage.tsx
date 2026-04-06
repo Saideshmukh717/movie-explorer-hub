@@ -109,7 +109,7 @@ export default function HomePage() {
     <div className="min-h-screen pt-16">
       {featured && <HeroBanner movie={featured} />}
 
-      <div className="container space-y-10 py-10">
+      <div className="container space-y-8 sm:space-y-10 py-8 sm:py-10 px-4">
         <MovieRow title="🔥 Trending Now" movies={trending} />
         <MovieRow title="⭐ Top Rated" movies={topRated} />
         <MovieRow title="💰 Box Office Hits" movies={boxOffice} />
