@@ -10,10 +10,10 @@ import { formatCurrency } from "@/lib/movieData";
 import { usePoster } from "@/hooks/usePoster";
 
 function HeroBanner({ movie }: { movie: any }) {
-  const poster = usePoster(movie.title, movie.year);
+  const { poster, ref } = usePoster(movie.title, movie.year);
 
   return (
-    <section className="relative overflow-hidden border-b border-border">
+    <section ref={ref} className="relative overflow-hidden border-b border-border">
       {poster && (
         <img
           src={poster}
