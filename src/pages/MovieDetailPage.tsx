@@ -45,7 +45,7 @@ function MovieDetailContent({ movie, allMovies }: { movie: any; allMovies: any[]
   return (
     <div className="min-h-screen pt-16">
       {/* Hero */}
-      <div className="relative border-b border-border">
+      <div ref={ref} className="relative border-b border-border">
         {poster && (
           <img src={poster} alt="" className="absolute inset-0 h-full w-full object-cover opacity-15 blur-md scale-105" />
         )}
