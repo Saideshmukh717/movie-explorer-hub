@@ -32,7 +32,7 @@ export default function MovieDetailPage() {
 }
 
 function MovieDetailContent({ movie, allMovies }: { movie: any; allMovies: any[] }) {
-  const poster = usePoster(movie.title, movie.year);
+  const { poster, ref } = usePoster(movie.title, movie.year);
   const recommendations = useMemo(() => getRecommendations(movie, allMovies, 8), [movie, allMovies]);
 
   const profit = movie.revenue - movie.budget;

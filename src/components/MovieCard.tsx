@@ -20,7 +20,7 @@ export function MovieCard({ movie, size = "md" }: MovieCardProps) {
   const firstGenre = movie.genres[0] || "Unknown";
   const colorClass = genreColors[firstGenre] || "bg-secondary text-secondary-foreground border-border";
   const year = movie.year || movie.release_date?.slice(0, 4);
-  const poster = usePoster(movie.title, movie.year);
+  const { poster, ref } = usePoster(movie.title, movie.year);
 
   return (
     <Link
@@ -31,6 +31,7 @@ export function MovieCard({ movie, size = "md" }: MovieCardProps) {
     >
       {/* Poster */}
       <div
+        ref={ref}
         className={`relative overflow-hidden bg-gradient-to-br from-secondary to-background ${
           size === "sm" ? "h-40" : size === "lg" ? "h-64" : "h-52"
         }`}
