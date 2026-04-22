@@ -1,8 +1,45 @@
 const OMDB_API_KEY = "2f656131";
 const OMDB_BASE = "https://www.omdbapi.com/";
 
+const STORAGE_KEY = "cinevault_poster_cache_v1";
+
+// Persistent cache backed by localStorage. Once a poster URL is resolved
+// (or confirmed missing), it's stored permanently so the OMDb API is never
+// called again for the same title/year combination.
 const posterCache = new Map<string, string | null>();
 const pendingRequests = new Map<string, Promise<string | null>>();
+
+// Hydrate in-memory cache from localStorage on module load
+try {
+  const raw = typeof localStorage !== "undefined" ? localStorage.getItem(STORAGE_KEY) : null;
+  if (raw) {
+    const parsed = JSON.parse(raw) as Record<string, string | null>;
+    for (const [k, v] of Object.entries(parsed)) posterCache.set(k, v);
+  }
+} catch {
+  // ignore corrupt cache
+}
+
+let persistTimer: ReturnType<typeof setTimeout> | null = null;
+function persistCache() {
+  if (typeof localStorage === "undefined") return;
+  if (persistTimer) clearTimeout(persistTimer);
+  // Debounce writes to avoid hammering localStorage during bulk fetches
+  persistTimer = setTimeout(() => {
+    try {
+      const obj: Record<string, string | null> = {};
+      posterCache.forEach((v, k) => { obj[k] = v; });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
+    } catch {
+      // quota exceeded or unavailable — silently ignore
+    }
+  }, 500);
+}
+
+export function clearPosterCache() {
+  posterCache.clear();
+  try { localStorage.removeItem(STORAGE_KEY); } catch { /* ignore */ }
+}
 
 // Concurrency limiter: max 3 simultaneous requests (mobile-friendly)
 let activeRequests = 0;
@@ -68,9 +105,11 @@ export async function fetchPosterByTitle(
           : null;
 
       posterCache.set(cacheKey, poster);
+      persistCache();
       return poster;
     } catch {
       posterCache.set(cacheKey, null);
+      persistCache();
       return null;
     } finally {
       pendingRequests.delete(cacheKey);
