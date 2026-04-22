@@ -4,6 +4,7 @@ import { Star, TrendingUp, DollarSign, Play } from "lucide-react";
 import { useMovies } from "@/contexts/MovieContext";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { MovieRow } from "@/components/MovieRow";
+import { RecommendedCarousel } from "@/components/RecommendedCarousel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/movieData";
@@ -106,25 +107,31 @@ export default function HomePage() {
   if (loading) return <LoadingScreen />;
 
   return (
-    <div className="min-h-screen pt-16">
+    <div className="min-h-screen pt-14 sm:pt-16">
       {featured && <HeroBanner movie={featured} />}
 
-      <div className="container space-y-8 sm:space-y-10 py-8 sm:py-10 px-4">
+      <div className="container space-y-8 sm:space-y-12 py-6 sm:py-10 px-4">
+        <RecommendedCarousel movies={movies} />
+
         <MovieRow title="🔥 Trending Now" movies={trending} />
         <MovieRow title="⭐ Top Rated" movies={topRated} />
         <MovieRow title="💰 Box Office Hits" movies={boxOffice} />
 
-        <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <section className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 animate-fade-in-up">
           {[
             { icon: TrendingUp, label: "Total Movies", value: movies.length.toLocaleString() },
             { icon: Star, label: "Avg Rating", value: (movies.reduce((s, m) => s + m.vote_average, 0) / movies.length).toFixed(1) },
             { icon: DollarSign, label: "Total Revenue", value: formatCurrency(movies.reduce((s, m) => s + m.revenue, 0)) },
             { icon: Play, label: "Genres", value: new Set(movies.flatMap((m) => m.genres)).size.toString() },
-          ].map((stat) => (
-            <div key={stat.label} className="rounded-lg border border-border bg-card p-5 text-center">
-              <stat.icon className="mx-auto h-6 w-6 text-primary mb-2" />
-              <p className="font-display text-2xl text-foreground">{stat.value}</p>
-              <p className="text-xs text-muted-foreground">{stat.label}</p>
+          ].map((stat, i) => (
+            <div
+              key={stat.label}
+              className="rounded-lg border border-border bg-card p-4 sm:p-5 text-center hover-lift hover:border-primary/30"
+              style={{ animationDelay: `${i * 80}ms` }}
+            >
+              <stat.icon className="mx-auto h-5 w-5 sm:h-6 sm:w-6 text-primary mb-2" />
+              <p className="font-display text-xl sm:text-2xl text-foreground">{stat.value}</p>
+              <p className="text-[11px] sm:text-xs text-muted-foreground">{stat.label}</p>
             </div>
           ))}
         </section>

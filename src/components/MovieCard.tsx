@@ -25,8 +25,8 @@ export function MovieCard({ movie, size = "md" }: MovieCardProps) {
   return (
     <Link
       to={`/movie/${movie.id}`}
-      className={`group relative flex flex-col overflow-hidden rounded-lg border border-border bg-card transition-all duration-300 hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1 ${
-        size === "sm" ? "min-w-[140px] sm:min-w-[180px]" : size === "lg" ? "min-w-[220px] sm:min-w-[280px]" : "min-w-[180px] sm:min-w-[220px]"
+      className={`group relative flex flex-col overflow-hidden rounded-lg border border-border bg-card hover-lift hover:border-primary/40 hover:shadow-lg hover:shadow-primary/10 active:scale-[0.98] ${
+        size === "sm" ? "min-w-[140px] sm:min-w-[180px]" : size === "lg" ? "min-w-[220px] sm:min-w-[280px]" : "min-w-[160px] sm:min-w-[220px]"
       }`}
     >
       {/* Poster */}
