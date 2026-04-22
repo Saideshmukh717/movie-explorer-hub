@@ -41,9 +41,13 @@ export function clearPosterCache() {
   try { localStorage.removeItem(STORAGE_KEY); } catch { /* ignore */ }
 }
 
-// Concurrency limiter: max 3 simultaneous requests (mobile-friendly)
+// Concurrency limiter: fewer parallel requests on mobile to keep
+// the main thread responsive and avoid network contention.
 let activeRequests = 0;
-const MAX_CONCURRENT = 3;
+const isMobileUA =
+  typeof navigator !== "undefined" &&
+  /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+const MAX_CONCURRENT = isMobileUA ? 2 : 4;
 const requestQueue: Array<() => void> = [];
 
 function dequeue() {

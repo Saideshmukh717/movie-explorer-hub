@@ -88,4 +88,44 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+
+  /* Smoother momentum scrolling on iOS / mobile */
+  .scroll-smooth-mobile {
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+  }
+  .scroll-smooth-mobile > * {
+    scroll-snap-align: start;
+  }
+
+  /* GPU-accelerated hover lift, cheaper on mobile than translate-y */
+  .hover-lift {
+    @apply transition-transform duration-300 ease-out will-change-transform;
+  }
+  .hover-lift:hover {
+    transform: translateY(-4px);
+  }
+
+  .shimmer-bg {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--secondary)) 0%,
+      hsl(var(--muted)) 40%,
+      hsl(var(--secondary)) 80%
+    );
+    background-size: 800px 100%;
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
