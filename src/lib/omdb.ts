@@ -105,9 +105,11 @@ export async function fetchPosterByTitle(
           : null;
 
       posterCache.set(cacheKey, poster);
+      persistCache();
       return poster;
     } catch {
       posterCache.set(cacheKey, null);
+      persistCache();
       return null;
     } finally {
       pendingRequests.delete(cacheKey);
